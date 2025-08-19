@@ -1,0 +1,22 @@
+$i-space-clr:ghostwhite;
+$i-space-bg:linear-gradient(to right, #ec77ab 0%, #7873f5 100%);
+
+.auth-div{
+    min-height: 100vh;
+    display: flex;
+    padding: 30px;
+    padding: 20px;
+    gap: 10px;
+    .i-space{
+        color: $i-space-clr;
+       background-image: $i-space-bg;
+       background-image:$i-space-bg ;
+    }
+    .main{
+        button{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

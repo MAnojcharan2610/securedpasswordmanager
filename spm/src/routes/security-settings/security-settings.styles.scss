@@ -1,0 +1,37 @@
+@use '../../mixins';
+.security-settings-div{
+    min-height: 90vh;
+    @include mixins.flex-down();
+    padding: 20px;
+    border-radius: 5px;
+    gap: 30px;
+    .main{
+        width: 100%;
+        padding:20px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        .tile{
+            width: 300px;
+            padding: 15px 15px 20px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            color: ghostwhite;
+            cursor: pointer;
+            svg{
+                font-size: 2.5rem;
+            }
+            p{
+                text-align: center;
+            }
+            span{
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+@use '../../mixins';
+
+.user-div{
+    min-height: 90vh;
+    @include mixins.flex-down();
+    padding: 20px;
+    border-radius: 5px;
+    gap: 30px;
+    // border: 1px solid;
+    .main{
+        width: 100%;
+        padding: 20px;
+        @include mixins.flex-down();
+        gap: 20px;
+        .astro-user{
+            font-size: 100px;
+        }
+        .p-url{
+            border-radius: 10px;
+        }
+        p{
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            word-break: break-all;
+        }
+        button{
+            font-size: 1.3rem;
+            padding: 5px 30px;
+        }
+        .lock-app-div{
+            display: flex;
+            gap: 10px;
+            .lock-app{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .info{
+                @include mixins.flex-cc();
+                cursor: pointer;
+                svg{
+                    font-size: 2.5rem;
+                }
+            }
+        }
+    }
+}

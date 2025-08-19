@@ -1,0 +1,47 @@
+.gen-significant-pass-div{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    .options{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: -40px;
+        .opts{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            .opt{
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                .tile-container{
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    justify-content: space-evenly;
+                    div{
+                        padding: 5px;
+                        flex: 1;
+                        border-radius: 25px;
+                        text-align: center;
+                        background-color: rgb(231, 229, 229);
+                        font-size: 1.2rem;
+                        cursor: pointer;
+                    }
+                    .seps{
+                        font-size: 1.3rem;
+                        padding: 7px;
+                    }
+                }
+            }
+        }
+    }
+    .gen{
+        padding: 5px;        
+        font-size: 1.1rem;
+    }
+
+}

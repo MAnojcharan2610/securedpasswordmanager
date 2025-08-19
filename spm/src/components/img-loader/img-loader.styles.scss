@@ -1,0 +1,17 @@
+.img-loader-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .img {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    
+    .fade-in {
+        opacity: 1;
+    }
+    
+    .hidden {
+        display: none;
+    }
+}

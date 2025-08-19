@@ -1,0 +1,55 @@
+$i-space-clr:ghostwhite;
+$i-space-bg:linear-gradient(to top, #30cfd0 0%, #330867 100%);
+
+.create-user-div{
+    min-height: 100vh;
+    display: flex;
+    padding: 20px;
+    gap: 10px;
+    .i-space{
+       color: $i-space-clr;
+       background-image: $i-space-bg;
+    }
+}
+@media screen and (max-width:720px){
+    .create-user-div{
+        .c-i-main{
+            margin-top: 10px;
+            gap:40px;
+        }
+    }
+}
+@media screen and (max-width:450px) {
+    .create-user-div{
+        .c-i-main{
+            .head{
+                h1{
+                    font-size: 1.7rem;
+                }
+            }
+            button{
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+@media screen and (max-width:400px) {
+    .create-user-div{
+        .c-i-main{
+            .head{
+                h1{
+                    font-size: 1.6rem;
+                }
+                p{
+                    font-size: 0.9rem;
+                }
+            }
+            input{
+                font-size: 1.1rem;
+            }
+            button{
+                font-size: 1.1rem;
+            }
+        }
+    }
+}

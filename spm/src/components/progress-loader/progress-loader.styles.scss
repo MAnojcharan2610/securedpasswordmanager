@@ -1,0 +1,18 @@
+.progress-loader-div{
+    border-radius: 2px;
+    background-color: #e0e0e0;
+    width: 100%;
+    .main-loader{
+        padding: 5px;
+        border-radius: 2px;
+        position: relative;
+        transition: width 0.8s ease-in-out;
+        .dot{
+            position: absolute;
+            padding: 5px 8px;
+            border-radius: 1px;
+            bottom: 0;
+            right: 0;
+        }
+    }
+}
