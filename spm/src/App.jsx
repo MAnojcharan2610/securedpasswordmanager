@@ -20,141 +20,7 @@ import SecuritySettings from "./routes/security-settings/security-settings.compo
 import InfoDocs from "./routes/info-docs/info-docs.component";
 import PasswordEntry from "./routes/password-entry/password-entry.component";
 import ChangeMasterPassword from "./routes/change-master-password/change-master-password.component";
-import { useGlobalDataContext } from './contexts/global-data.context';
-import { useKeyGenerationContext } from "./contexts/key-generation.context";
-import { isPasswordPwned } from "./utils/helpers/breachCheck";
-
-const CompromisedPasswordsDynamic = () => {
-  const { globalPasswordData } = useGlobalDataContext();
-  const { userKeys } = useKeyGenerationContext();
-  const [compromisedPasswords, setCompromisedPasswords] = useState([]);
-  const [isChecking, setIsChecking] = useState(false);
-
-  useEffect(() => {
-    const checkPasswords = async () => {
-      setIsChecking(true);
-      const results = [];
-      for (const item of globalPasswordData) {
-        try {
-          if (!userKeys) continue;
-          const { handleKeySelectionAndDecryptionProcess } = await import("./utils/helpers/globalFunctions");
-          const decrypted = await handleKeySelectionAndDecryptionProcess(item, userKeys);
-          const isCompromised = await isPasswordPwned(decrypted);
-          const { ref, update, get } = await import("firebase/database");
-          const { realtimeDb } = await import("./utils/firebase/firebase");
-          const userPasswordRef = ref(realtimeDb, `userPasswords/${item.userId || item.uid || ''}/${item.key}`);
-
-          // Always fetch the latest password details
-          const snapshot = await get(userPasswordRef);
-          const passwordData = snapshot.val();
-
-          if (isCompromised) {
-            // Persist flag in Firebase
-            await update(userPasswordRef, {
-              isCompromised: true,
-            });
-            results.push({
-              ...item,
-              isCompromised: true,
-            });
-          } else if (passwordData?.isCompromised) {
-            // If password is no longer compromised (changed by user), clear flag
-            await update(userPasswordRef, {
-              isCompromised: null,
-            });
-          }
-        } catch {
-          // Ignore errors for individual passwords
-        }
-      }
-      setCompromisedPasswords(results);
-      setIsChecking(false);
-    };
-    if (globalPasswordData.length && userKeys) {
-      checkPasswords();
-    }
-  }, [globalPasswordData, userKeys]);
-
-  const handleChangePassword = async (item) => {
-    const newPassword = prompt(`Enter a new password for ${item.inputSite}:`);
-    if (!newPassword) {
-      alert("Password change canceled.");
-      return;
-    }
-    await updatePasswordInFirebase(item.key, newPassword);
-    alert("Password changed successfully.");
-  };
-
-  const updatePasswordInFirebase = async (key, newPassword) => {
-    try {
-      const { ref, update } = await import("firebase/database");
-      const { realtimeDb } = await import("./utils/firebase/firebase");
-      const userPasswordRef = ref(realtimeDb, `userPasswords/${auth.currentUser.uid}/${key}`);
-
-      // Update the password in Firebase
-      await update(userPasswordRef, {
-        password: newPassword,
-        isCompromised: null, // Clear the compromised flag
-      });
-
-      console.log("Password updated successfully.");
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
-  };
-
-  return (
-    <div className="compromised-passwords-div">
-      <h1>Compromised Passwords</h1>
-      <p>Below are passwords that have been compromised in the past or are at risk in the future.</p>
-      {isChecking ? (
-        <div style={{ textAlign: "center", padding: "2rem" }}>
-          <span>Checking passwords against breach database...</span>
-        </div>
-      ) : (
-        <table className="compromised-table">
-          <thead>
-            <tr>
-              <th>Service</th>
-              <th>Username</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {compromisedPasswords.length === 0 ? (
-              <tr>
-                <td colSpan={3}>No compromised passwords found.</td>
-              </tr>
-            ) : (
-              compromisedPasswords.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.inputSite}</td>
-                  <td>{item.inputUsername}</td>
-                  <td>
-                    <button
-                      style={{
-                        backgroundColor: "#007bff",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "5px",
-                        padding: "0.5rem 1rem",
-                        cursor: "pointer",
-                        fontSize: "0.9rem",
-                      }}
-                      onClick={() => handleChangePassword(item)}
-                    >
-                      Change Password
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      )}
-    </div>
-  );
-};
+import CompromisedPasswords from "./routes/compromised-passwords/compromised-passwords.component";
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useUserAuthContext();
@@ -215,7 +81,7 @@ function App() {
           <Route path="public-information" element={<InfoDocs/>} />
           <Route path="password-entry/:key" element={<PasswordEntry/>} />
           <Route path="change-master-password" element={<ChangeMasterPassword/>} />
-          <Route path="compromised-passwords" element={<CompromisedPasswordsDynamic/>} />
+          <Route path="compromised-passwords" element={<CompromisedPasswords/>} />
         </Route>
 
         <Route path="/auth" element={
