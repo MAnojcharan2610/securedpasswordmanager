@@ -16,10 +16,13 @@ const CompromisedPasswords = () => {
   const {isAuthenticatedWithPassword}=useUserAuthContext();
   
   useEffect(()=>{
-    checkPasswords();
-  },[])
+    if(isAuthenticatedWithPassword && userKeys){
+      checkPasswords();
+    }
+  },[userKeys,isAuthenticatedWithPassword])
 
   const checkPasswords = async () => {
+    
     setLoading(true);
     setChecking(true);
     const results = [];
@@ -66,7 +69,9 @@ const CompromisedPasswords = () => {
   };
 
   const handleRefresh = () => {
-    checkPasswords();
+    if(isAuthenticatedWithPassword && userKeys){
+      checkPasswords();
+    }
   };
   if(!isAuthenticatedWithPassword){
         return <AuthenticationForm />
